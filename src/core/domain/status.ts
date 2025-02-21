@@ -1,4 +1,4 @@
-export class HotDeskStatus {
+export class Status {
   static getActive(): string {
     return 'Active';
   }

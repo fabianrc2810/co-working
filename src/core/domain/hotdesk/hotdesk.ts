@@ -1,6 +1,6 @@
-import { HotDeskId } from 'src/core/domain/hotdesk/hotdesk.id';
-import { HotDeskStatus } from 'src/core/domain/status';
 import { HotDeskNumber } from './hotdesk.number';
+import { HotDeskId } from './hotdesk.id';
+import { HotDeskStatus } from './hotdesk.status';
 
 export class HotDesk {
   id: HotDeskId;
