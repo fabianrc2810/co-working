@@ -20,7 +20,7 @@ export class MeetingRoom {
     this.updatedAt = new Date();
   }
 
-  getHotDesk(): this {
+  getMeetingRoom(): this {
     return this;
   }
 }
