@@ -8,6 +8,8 @@ import { MeetingRoom } from 'src/core/domain/meeting-room/meeting-room';
 import { MeetingRoomName } from 'src/core/domain/meeting-room/meeting-room.name';
 import { MeetingRoomExists } from 'src/core/domain/meeting-room/meeting-room.name.exists';
 import { MeetingRoomCapacity } from 'src/core/domain/meeting-room/meeting-room.capacity';
+import { MeetingRoomNameValid } from 'src/core/domain/meeting-room/meeting-room.name.valid';
+import { MeetingRoomCapacityValid } from 'src/core/domain/meeting-room/meeting-room.capacity.valid';
 
 export class RegisterMeetingRoomService {
   constructor(
@@ -16,6 +18,18 @@ export class RegisterMeetingRoomService {
   ) {}
 
   async execute(createMeetingRoomDto: MeetingRoomDTO): Promise<MeetingRoom> {
+    const meetingRoomNameValid = new MeetingRoomNameValid(
+      this.meetingRoomRepository,
+    );
+
+    await meetingRoomNameValid.check(createMeetingRoomDto.name);
+
+    const meetingRoomCapacityValid = new MeetingRoomCapacityValid(
+      this.meetingRoomRepository,
+    );
+
+    await meetingRoomCapacityValid.check(createMeetingRoomDto.capacity);
+
     const meetingRoomName = MeetingRoomName.create(createMeetingRoomDto.name);
     const meetingRoomCapacity = MeetingRoomCapacity.create(
       createMeetingRoomDto.capacity,

@@ -5,7 +5,7 @@ import { MeetingRoomRepository } from 'src/core/domain/meeting-room/meeting-room
 export class InMemoryMeetingRoomRepository implements MeetingRoomRepository {
   private readonly meetingRooms: MeetingRoom[] = [];
 
-  checkName(name: MeetingRoomName): Promise<boolean> {
+  checkName(name: string): Promise<boolean> {
     return Promise.resolve(!!name);
   }
 

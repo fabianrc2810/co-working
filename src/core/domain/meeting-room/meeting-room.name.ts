@@ -6,9 +6,6 @@ export class MeetingRoomName {
   }
 
   static create(name: string): MeetingRoomName {
-    if (name.trim().length === 0) {
-      throw new Error('Invalid name provided.');
-    }
     return new MeetingRoomName(name);
   }
 
