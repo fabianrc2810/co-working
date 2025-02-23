@@ -4,5 +4,6 @@ export const HOTDESK_REPOSITORY = 'HOTDESK_REPOSITORY'; // Token de inyección
 
 export interface HotDeskRepository {
   exists(number: HotDeskNumber): Promise<boolean>;
+  valid(number: number): Promise<boolean>;
   save(hotDesk: HotDesk): Promise<HotDesk>;
 }

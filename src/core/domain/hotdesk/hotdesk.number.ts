@@ -6,10 +6,6 @@ export class HotDeskNumber {
   }
 
   static create(number: number): HotDeskNumber {
-    if (!Number.isInteger(number) || number <= 0) {
-      throw new Error('Invalid number provided.');
-    }
-
     return new HotDeskNumber(number);
   }
 

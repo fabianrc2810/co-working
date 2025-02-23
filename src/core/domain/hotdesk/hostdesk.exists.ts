@@ -1,6 +1,6 @@
-import { ConflictException } from '@nestjs/common';
 import { HotDeskNumber } from './hotdesk.number';
 import { HotDeskRepository } from './hotdesk.repository';
+import { HttpConflictException } from '../http/conflict.exception';
 
 export class HotDeskExists {
   constructor(private readonly hotDeskRepository: HotDeskRepository) {}
@@ -8,7 +8,7 @@ export class HotDeskExists {
   async check(number: HotDeskNumber): Promise<void> {
     const exists = await this.hotDeskRepository.exists(number);
     if (exists) {
-      throw new ConflictException('HotDesk number already exists.');
+      throw new HttpConflictException('HotDesk number already exists.');
     }
   }
 }

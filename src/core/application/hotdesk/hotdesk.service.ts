@@ -7,6 +7,7 @@ import {
 import { HotDeskDto } from './dto/hotdesk';
 import { HotDeskNumber } from 'src/core/domain/hotdesk/hotdesk.number';
 import { HotDeskExists } from 'src/core/domain/hotdesk/hostdesk.exists';
+import { HotDeskNumberValid } from 'src/core/domain/hotdesk/hotdesk.number.valid';
 
 @Injectable()
 export class RegisterHotDeskService {
@@ -16,6 +17,9 @@ export class RegisterHotDeskService {
   ) {}
 
   async execute(createHotDeskDto: HotDeskDto): Promise<HotDesk> {
+    const hotDeskNumberValid = new HotDeskNumberValid(this.hotDeskRepository);
+    await hotDeskNumberValid.valid(createHotDeskDto.number);
+
     const hotDeskNumber = HotDeskNumber.create(createHotDeskDto.number);
     const hotDeskExists = new HotDeskExists(this.hotDeskRepository);
 
