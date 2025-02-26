@@ -7,4 +7,5 @@ export interface MeetingRoomRepository {
   checkName(name: string): Promise<boolean>;
   checkCapacity(capacity: number): Promise<boolean>;
   save(name: MeetingRoom): Promise<MeetingRoom>;
+  findById(id: string): Promise<MeetingRoom | null>;
 }

@@ -7,4 +7,8 @@ export interface ReservationRepository {
   validDuration(duration: number): Promise<boolean>;
   validUser(userId: string): Promise<boolean>;
   save(reservation: Reservation): Promise<Reservation>;
+  findActiveByMeetingRoomAndDate(
+    meetingRoomId: string,
+    date: string,
+  ): Promise<Reservation[]>;
 }

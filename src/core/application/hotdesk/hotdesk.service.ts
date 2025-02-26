@@ -20,9 +20,9 @@ export class RegisterHotDeskService {
     const hotDeskNumberValid = new HotDeskNumberValid(this.hotDeskRepository);
     await hotDeskNumberValid.valid(createHotDeskDto.number);
 
-    const hotDeskNumber = HotDeskNumber.create(createHotDeskDto.number);
+    const hotDeskNumber = HotDeskNumber.create(-1);
     const hotDeskExists = new HotDeskExists(this.hotDeskRepository);
-
+//si existe el hotdesk validarlo acá
     await hotDeskExists.check(hotDeskNumber);
     const hotDesk = new HotDesk(hotDeskNumber);
 
