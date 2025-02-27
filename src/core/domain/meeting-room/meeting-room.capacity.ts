@@ -1,3 +1,5 @@
+import { BadRequestException } from '@nestjs/common';
+
 export class MeetingRoomCapacity {
   private readonly capacity: number;
 
@@ -6,8 +8,10 @@ export class MeetingRoomCapacity {
   }
 
   static create(capacity: number): MeetingRoomCapacity {
-    if (isNaN(capacity)) {
-      throw new Error('Value must to be a number.');
+    if (isNaN(capacity) || capacity <= 0) {
+      throw new BadRequestException(
+        'Capacity number must be a valid positive integer.',
+      );
     }
     return new MeetingRoomCapacity(capacity);
   }
