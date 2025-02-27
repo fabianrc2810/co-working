@@ -6,8 +6,6 @@ export class InMemoryMeetingRoomRepository implements MeetingRoomRepository {
   private readonly meetingRooms: MeetingRoom[] = [];
 
   findById(id: string): Promise<MeetingRoom | null> {
-    console.log(id);
-    console.log(this.meetingRooms);
     const meetingRoom = this.meetingRooms.find((mr) => mr.id === id);
     return Promise.resolve(meetingRoom || null);
   }

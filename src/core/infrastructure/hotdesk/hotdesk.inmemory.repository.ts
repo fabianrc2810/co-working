@@ -7,11 +7,6 @@ import { HotDeskRepository } from 'src/core/domain/hotdesk/hotdesk.repository';
 export class InMemoryHotDeskRepository implements HotDeskRepository {
   private readonly hotDesks: HotDesk[] = [];
 
-  valid(number: number): Promise<boolean> {
-    const value = number;
-    return Promise.resolve(!!value);
-  }
-
   exists(objHotDesk: HotDeskNumber): Promise<boolean> {
     const value = objHotDesk.value();
     return Promise.resolve(
@@ -19,8 +14,8 @@ export class InMemoryHotDeskRepository implements HotDeskRepository {
     );
   }
 
-  save(hotDesk: HotDesk): Promise<HotDesk> {
+  async save(hotDesk: HotDesk): Promise<void> {
     this.hotDesks.push(hotDesk);
-    return Promise.resolve(hotDesk);
+    await Promise.resolve(hotDesk);
   }
 }
