@@ -1,13 +1,8 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpStatus,
-  HttpException,
-} from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import { Controller, Post, Body, HttpException } from '@nestjs/common';
+import { HttpResponse } from 'src/core/application/http-response';
 import { HotDeskDto } from 'src/core/application/hotdesk/dto/hotdesk';
 import { CreateHotDeskCommandHandler } from 'src/core/application/hotdesk/createhotdesk.command-handler';
-import { ResponseBody } from '../response';
 
 @Controller('hotdesks')
 export class HotDeskController {
@@ -16,19 +11,15 @@ export class HotDeskController {
   ) {}
 
   @Post()
-  async register(@Body() request: HotDeskDto): Promise<ResponseBody> {
+  async register(@Body() request: HotDeskDto): Promise<HttpResponse> {
     try {
-      await this.createHotDeskCommandHandler.handle(request);
-      return ResponseBody.created({
-        message: `HotDesk '${request.number}' created successfully.`,
-      });
+      const result = await this.createHotDeskCommandHandler.handle(request);
+      return result;
     } catch (error) {
       throw new HttpException(
-        ResponseBody.internalServerError({
-          status: (error as HttpException).getStatus(),
-          message: (error as HttpException).message,
-        }),
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        error instanceof Error ? error['response'] : JSON.stringify(error),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        error['status'] || 500,
       );
     }
   }
