@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { InvalidMeetingRoomNameError } from './invalid-meeting-room-name.error';
 
 export class MeetingRoomName {
   private readonly name: string;
@@ -9,7 +9,7 @@ export class MeetingRoomName {
 
   static create(name: string): MeetingRoomName {
     if (!name) {
-      throw new BadRequestException('Name is required');
+      throw InvalidMeetingRoomNameError.withInvalidMeetingRoomName();
     }
 
     return new MeetingRoomName(name);

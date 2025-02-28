@@ -1,3 +1,5 @@
+import { BadRequestException } from '@nestjs/common';
+
 export class OfficeNumber {
   private readonly number: number;
 
@@ -6,6 +8,10 @@ export class OfficeNumber {
   }
 
   static create(number: number): OfficeNumber {
+    if (isNaN(number) || number <= 0) {
+      throw new BadRequestException('Number must be a valid positive integer.');
+    }
+
     return new OfficeNumber(number);
   }
 

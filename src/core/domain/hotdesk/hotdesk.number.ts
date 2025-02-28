@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { InvalidHotDeskNumberError } from './invalid-hotdesknumber.error';
 
 export class HotDeskNumber {
   private readonly number: number;
@@ -9,9 +9,7 @@ export class HotDeskNumber {
 
   static create(number: number): HotDeskNumber {
     if (isNaN(number) || number <= 0) {
-      throw new BadRequestException(
-        'HotDesk number must be a valid positive integer.',
-      );
+      throw InvalidHotDeskNumberError.withInvalidHotDeskNumber(number);
     }
 
     return new HotDeskNumber(number);

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { Controller, Post, Body, HttpException } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { MeetingRoomDTO } from 'src/core/application/meeting-room/dto/meeting-room.dto';
 import { CreateHotDeskCommandHandler } from 'src/core/application/meeting-room/createmeeting-room.command-handler';
-import { HttpResponse } from 'src/core/application/http-response';
+import { CommandHandlerResponse } from 'src/core/application/command-handler.response';
 
 @Controller('meeting-rooms')
 export class MeetingRoomController {
@@ -13,16 +13,12 @@ export class MeetingRoomController {
   @Post()
   async register(
     @Body() createMeetingRoom: MeetingRoomDTO,
-  ): Promise<HttpResponse> {
+  ): Promise<CommandHandlerResponse> {
     try {
       const result = await this.registerMeetingRoom.handle(createMeetingRoom);
       return result;
     } catch (error) {
-      throw new HttpException(
-        error instanceof Error ? error['response'] : JSON.stringify(error),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        error['status'] || 500,
-      );
+      throw CommandHandlerResponse.throwError(error);
     }
   }
 }

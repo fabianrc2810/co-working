@@ -1,4 +1,4 @@
-import { HttpException, Inject } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import {
   MEETING_ROOM_REPOSITORY,
   MeetingRoomRepository,
@@ -7,7 +7,8 @@ import { MeetingRoomDTO } from './dto/meeting-room.dto';
 import { MeetingRoom } from 'src/core/domain/meeting-room/meeting-room';
 import { MeetingRoomName } from 'src/core/domain/meeting-room/meeting-room.name';
 import { MeetingRoomCapacity } from 'src/core/domain/meeting-room/meeting-room.capacity';
-import { HttpResponse } from '../http-response';
+import { CommandHandlerResponse } from '../command-handler.response';
+import { MeetingRoomDuplicatedException } from './meeting-room.exception';
 
 export class CreateHotDeskCommandHandler {
   constructor(
@@ -17,7 +18,7 @@ export class CreateHotDeskCommandHandler {
 
   async handle(
     createMeetingRoomCommand: MeetingRoomDTO,
-  ): Promise<HttpResponse> {
+  ): Promise<CommandHandlerResponse> {
     const meetingRoomName = MeetingRoomName.create(
       createMeetingRoomCommand.name,
     );
@@ -27,16 +28,13 @@ export class CreateHotDeskCommandHandler {
 
     const exists = await this.meetingRoomRepository.exists(meetingRoomName);
     if (exists) {
-      throw new HttpException(
-        HttpResponse.conflict('MeetingRoom name already exists.'),
-        498,
-      );
+      throw MeetingRoomDuplicatedException.withHotDeskNumber(meetingRoomName);
     }
 
     const meetingRoom = new MeetingRoom(meetingRoomName, meetingRoomCapacity);
 
     await this.meetingRoomRepository.save(meetingRoom);
 
-    return HttpResponse.created(meetingRoom);
+    return CommandHandlerResponse.created(meetingRoom);
   }
 }
