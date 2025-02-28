@@ -6,7 +6,6 @@ import {
 } from 'src/core/domain/hotdesk/hotdesk.repository';
 import { HotDeskDto } from './dto/hotdesk';
 import { HotDeskNumber } from 'src/core/domain/hotdesk/hotdesk.number';
-import { CommandHandlerResponse } from '../command-handler.response';
 import { HotDeskNumberDuplicatedException } from './hotdesk.exception';
 
 @Injectable()
@@ -16,7 +15,7 @@ export class CreateHotDeskCommandHandler {
     private readonly hotDeskRepository: HotDeskRepository,
   ) {}
 
-  async handle(createHotDeskDto: HotDeskDto): Promise<CommandHandlerResponse> {
+  async handle(createHotDeskDto: HotDeskDto): Promise<void> {
     const hotDeskNumber = HotDeskNumber.create(createHotDeskDto.number);
 
     const exists = await this.hotDeskRepository.exists(hotDeskNumber);
@@ -27,7 +26,5 @@ export class CreateHotDeskCommandHandler {
     const hotDesk = new HotDesk(hotDeskNumber);
 
     await this.hotDeskRepository.save(hotDesk);
-
-    return CommandHandlerResponse.created(hotDesk);
   }
 }

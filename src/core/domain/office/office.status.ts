@@ -1,5 +1,5 @@
-import { BadRequestException } from '@nestjs/common';
 import { Status } from '../status';
+import { InvalidOfficeStatusError } from './invalid-office-status.error';
 
 export class OfficeStatus extends Status {
   private readonly status: string;
@@ -12,9 +12,7 @@ export class OfficeStatus extends Status {
   static create(status: string): OfficeStatus {
     const statusList = ['Activo', 'Inactivo'];
     if (!statusList.includes(status)) {
-      throw new BadRequestException(
-        'Status value must be a valid positive integer.',
-      );
+      throw InvalidOfficeStatusError.withInvalidOfficeStatus(status);
     }
 
     return new OfficeStatus(status);

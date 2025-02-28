@@ -8,7 +8,6 @@ import { Office } from 'src/core/domain/office/office';
 import { OfficeNumber } from 'src/core/domain/office/office.number';
 import { OfficeLeasePeriod } from 'src/core/domain/office/office.leaseperiod';
 import { OfficeStatus } from 'src/core/domain/office/office.status';
-import { CommandHandlerResponse } from '../command-handler.response';
 import { OfficeNumberDuplicatedException } from './office.exception';
 
 export class CreateOfficeCommandHandler {
@@ -17,9 +16,7 @@ export class CreateOfficeCommandHandler {
     private readonly officeRepository: OfficeRepository,
   ) {}
 
-  async handle(
-    createOfficeCommand: CreateOfficeDTO,
-  ): Promise<CommandHandlerResponse> {
+  async handle(createOfficeCommand: CreateOfficeDTO): Promise<void> {
     const officeLeasePeriod = createOfficeCommand.leasePeriod
       ? OfficeLeasePeriod.create(createOfficeCommand.leasePeriod)
       : OfficeLeasePeriod.default();
@@ -37,7 +34,5 @@ export class CreateOfficeCommandHandler {
     const office = new Office(officeNumber, officeLeasePeriod, officeStatus);
 
     await this.officeRepository.save(office);
-
-    return CommandHandlerResponse.created(createOfficeCommand);
   }
 }

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Controller, Post, Body } from '@nestjs/common';
-import { CommandHandlerResponse } from 'src/core/application/command-handler.response';
 import { HotDeskDto } from 'src/core/application/hotdesk/dto/hotdesk';
 import { CreateHotDeskCommandHandler } from 'src/core/application/hotdesk/createhotdesk.command-handler';
+import { ErrorResponseFactory } from '../error-response-factory';
 
 @Controller('hotdesks')
 export class HotDeskController {
@@ -11,12 +11,12 @@ export class HotDeskController {
   ) {}
 
   @Post()
-  async register(@Body() request: HotDeskDto): Promise<CommandHandlerResponse> {
+  async register(@Body() request: HotDeskDto): Promise<HotDeskDto> {
     try {
-      const result = await this.createHotDeskCommandHandler.handle(request);
-      return result;
+      await this.createHotDeskCommandHandler.handle(request);
+      return request;
     } catch (error) {
-      throw CommandHandlerResponse.throwError(error);
+      throw ErrorResponseFactory.create(error);
     }
   }
 }

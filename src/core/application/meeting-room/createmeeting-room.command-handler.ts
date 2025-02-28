@@ -7,7 +7,6 @@ import { MeetingRoomDTO } from './dto/meeting-room.dto';
 import { MeetingRoom } from 'src/core/domain/meeting-room/meeting-room';
 import { MeetingRoomName } from 'src/core/domain/meeting-room/meeting-room.name';
 import { MeetingRoomCapacity } from 'src/core/domain/meeting-room/meeting-room.capacity';
-import { CommandHandlerResponse } from '../command-handler.response';
 import { MeetingRoomDuplicatedException } from './meeting-room.exception';
 
 export class CreateHotDeskCommandHandler {
@@ -16,9 +15,7 @@ export class CreateHotDeskCommandHandler {
     private readonly meetingRoomRepository: MeetingRoomRepository,
   ) {}
 
-  async handle(
-    createMeetingRoomCommand: MeetingRoomDTO,
-  ): Promise<CommandHandlerResponse> {
+  async handle(createMeetingRoomCommand: MeetingRoomDTO): Promise<void> {
     const meetingRoomName = MeetingRoomName.create(
       createMeetingRoomCommand.name,
     );
@@ -34,7 +31,5 @@ export class CreateHotDeskCommandHandler {
     const meetingRoom = new MeetingRoom(meetingRoomName, meetingRoomCapacity);
 
     await this.meetingRoomRepository.save(meetingRoom);
-
-    return CommandHandlerResponse.created(meetingRoom);
   }
 }

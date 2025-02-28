@@ -2,7 +2,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { MeetingRoomDTO } from 'src/core/application/meeting-room/dto/meeting-room.dto';
 import { CreateHotDeskCommandHandler } from 'src/core/application/meeting-room/createmeeting-room.command-handler';
-import { CommandHandlerResponse } from 'src/core/application/command-handler.response';
+import { ErrorResponseFactory } from '../error-response-factory';
 
 @Controller('meeting-rooms')
 export class MeetingRoomController {
@@ -11,14 +11,12 @@ export class MeetingRoomController {
   ) {}
 
   @Post()
-  async register(
-    @Body() createMeetingRoom: MeetingRoomDTO,
-  ): Promise<CommandHandlerResponse> {
+  async register(@Body() request: MeetingRoomDTO): Promise<MeetingRoomDTO> {
     try {
-      const result = await this.registerMeetingRoom.handle(createMeetingRoom);
-      return result;
+      await this.registerMeetingRoom.handle(request);
+      return request;
     } catch (error) {
-      throw CommandHandlerResponse.throwError(error);
+      throw ErrorResponseFactory.create(error);
     }
   }
 }

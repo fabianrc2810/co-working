@@ -1,18 +1,15 @@
-export class InvalidOfficeLeasePeriodError extends Error {
-  errorCode: number;
+import { BaseError } from 'src/core/exceptions/base-error.exception';
 
-  constructor(message: string, errorCode: number) {
-    super(message);
-    this.errorCode = errorCode;
-    this.name = 'InvalidOfficeLeasePeriodError';
+export class InvalidOfficeLeasePeriodError extends BaseError {
+  constructor(message: string) {
+    super(message, 'InvalidOfficeLeasePeriodError');
   }
 
   static withInvalidOfficeLeasePeriod(
     leasePeriod: number,
   ): InvalidOfficeLeasePeriodError {
     return new InvalidOfficeLeasePeriodError(
-      `Lease period number must be a valid positive integer: ${leasePeriod}`,
-      400,
+      `Lease period must be a valid positive integer: ${leasePeriod}`,
     );
   }
 }

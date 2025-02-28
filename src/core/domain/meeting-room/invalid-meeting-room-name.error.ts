@@ -1,13 +1,11 @@
-export class InvalidMeetingRoomNameError extends Error {
-  statusCode: number;
+import { BaseError } from 'src/core/exceptions/base-error.exception';
 
-  constructor(message: string, statusCode: number) {
-    super(message);
-    this.name = 'InvalidMeetingRoomNameError';
-    this.statusCode = statusCode;
+export class InvalidMeetingRoomNameError extends BaseError {
+  constructor(message: string) {
+    super(message, 'InvalidMeetingRoomNameError');
   }
 
   static withInvalidMeetingRoomName(): InvalidMeetingRoomNameError {
-    return new InvalidMeetingRoomNameError('Name is required', 400);
+    return new InvalidMeetingRoomNameError('Name is required');
   }
 }

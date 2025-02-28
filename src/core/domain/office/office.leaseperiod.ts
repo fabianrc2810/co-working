@@ -9,7 +9,6 @@ export class OfficeLeasePeriod {
 
   static create(number: number): OfficeLeasePeriod {
     if (isNaN(number) || number <= 0) {
-      console.log('error');
       throw InvalidOfficeLeasePeriodError.withInvalidOfficeLeasePeriod(number);
     }
     return new OfficeLeasePeriod(number);
