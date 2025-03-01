@@ -3,6 +3,13 @@ import { ReservationRepository } from 'src/core/domain/reservation/reservation.r
 
 export class InMemoryReservation implements ReservationRepository {
   private readonly reservations: Reservation[] = [];
+  get(): Promise<Reservation[]> {
+    return Promise.resolve(this.reservations);
+  }
+
+  async isOverlapping(result: boolean): Promise<boolean> {
+    return Promise.resolve(result);
+  }
 
   async findActiveByMeetingRoomAndDate(
     meetingRoomId: string,
@@ -11,27 +18,11 @@ export class InMemoryReservation implements ReservationRepository {
     return Promise.resolve(
       this.reservations.filter(
         (reservation) =>
-          reservation.meetingRoomId === meetingRoomId &&
+          reservation.meetingRoomId.value() === meetingRoomId &&
           reservation.date.value() === date &&
           reservation.status,
       ),
     );
-  }
-
-  async validDate(date: string): Promise<boolean> {
-    return Promise.resolve(!!date);
-  }
-
-  async validHour(hour: number): Promise<boolean> {
-    return Promise.resolve(!!hour);
-  }
-
-  async validDuration(duration: number): Promise<boolean> {
-    return Promise.resolve(!!duration);
-  }
-
-  async validUser(userId: string): Promise<boolean> {
-    return Promise.resolve(!!userId);
   }
 
   async save(reservation: Reservation): Promise<Reservation> {

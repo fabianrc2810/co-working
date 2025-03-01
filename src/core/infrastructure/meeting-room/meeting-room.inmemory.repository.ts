@@ -10,14 +10,6 @@ export class InMemoryMeetingRoomRepository implements MeetingRoomRepository {
     return Promise.resolve(meetingRoom || null);
   }
 
-  checkName(name: string): Promise<boolean> {
-    return Promise.resolve(!!name);
-  }
-
-  checkCapacity(capacity: number): Promise<boolean> {
-    return Promise.resolve(capacity > 0);
-  }
-
   exists(name: MeetingRoomName): Promise<boolean> {
     const value = name.value();
     return Promise.resolve(

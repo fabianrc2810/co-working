@@ -1,3 +1,5 @@
+import { InvalidReservationDateError } from './invalid-reservation-date.error';
+
 export class ReservationDate {
   private readonly date: string;
 
@@ -6,6 +8,24 @@ export class ReservationDate {
   }
 
   static create(date: string): ReservationDate {
+    if (!date) {
+      throw InvalidReservationDateError.withInvalidReservationDateError(
+        'Date is required.',
+      );
+    }
+
+    if (isNaN(Date.parse(date))) {
+      throw InvalidReservationDateError.withInvalidReservationDateError(
+        `Date must be a valid date: '${date}'`,
+      );
+    }
+
+    if (new Date(date) < new Date()) {
+      throw InvalidReservationDateError.withInvalidReservationDateError(
+        `Date must be a future date: '${date}'`,
+      );
+    }
+
     return new ReservationDate(date);
   }
 
