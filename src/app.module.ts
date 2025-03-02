@@ -3,9 +3,16 @@ import { HotDeskModule } from './core/infrastructure/hotdesk/hotdesk.module';
 import { MeetingRoomModule } from './core/infrastructure/meeting-room/meeting-room.module';
 import { OfficeModule } from './core/infrastructure/office/office.module';
 import { ReservationModule } from './core/infrastructure/reservation/reservation.module';
+import { HotDeskReservationModule } from './core/infrastructure/hotdesk-reservation/hotdesk-reservation.module';
 
 @Module({
-  imports: [HotDeskModule, MeetingRoomModule, OfficeModule, ReservationModule],
+  imports: [
+    HotDeskModule,
+    MeetingRoomModule,
+    OfficeModule,
+    ReservationModule,
+    HotDeskReservationModule,
+  ],
   controllers: [],
   providers: [],
 })

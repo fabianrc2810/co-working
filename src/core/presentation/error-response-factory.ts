@@ -15,6 +15,9 @@ import { InvalidReservationMeetingRoomIdError } from '../domain/reservation/inva
 import { InvalidReservationUserError } from '../domain/reservation/invalid-reservation-user.error';
 import { ReservationError } from '../application/reservation/reservation.exception';
 import { ReservationMeetingRoomError } from '../application/reservation/reservation-meeting-room.exception';
+import { InvalidHotDeskReservationDateError } from '../domain/hotdesk-reservation/invalid-hotdeskdate.error';
+import { InvalidHotDeskReservationUserIdError } from '../domain/hotdesk-reservation/invalid-hotdeskuserId.error';
+import { HotDeskReservationException } from '../application/hotdesk-reservation/hotdesk-reservation.exception';
 
 type ErrorClass = new (...args: any[]) => Error;
 
@@ -98,6 +101,27 @@ const errorMappings = new Map<ErrorClass, ErrorMapping>([
     {
       status: HttpStatus.NOT_FOUND,
       code: 'RESERVATION_MEETING_ROOM_ERROR',
+    },
+  ],
+  [
+    InvalidHotDeskReservationDateError,
+    {
+      status: HttpStatus.BAD_REQUEST,
+      code: 'HOT_DESK_RESERVATION_DATE_ERROR',
+    },
+  ],
+  [
+    InvalidHotDeskReservationUserIdError,
+    {
+      status: HttpStatus.BAD_REQUEST,
+      code: 'HOT_DESK_RESERVATION_USERID_ERROR',
+    },
+  ],
+  [
+    HotDeskReservationException,
+    {
+      status: HttpStatus.CONFLICT,
+      code: 'HOT_DESK_RESERVATION_ERROR',
     },
   ],
 ]);
