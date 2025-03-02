@@ -1,3 +1,4 @@
+import { HotDeskId } from '../hotdesk/hotdesk.id';
 import { ReservationDate } from './reservation.date';
 import { ReservationDuration } from './reservation.duration';
 import { ReservationHour } from './reservation.hour';
@@ -16,6 +17,7 @@ export class Reservation {
   status: ReservationStatus;
   createdAt: string;
   updatedAt: string;
+  hotDeskId?: HotDeskId;
 
   constructor(
     meetingRoomId: ReservationMeetingRoomId,

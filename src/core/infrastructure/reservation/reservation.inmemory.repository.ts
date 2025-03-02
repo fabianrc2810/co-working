@@ -3,6 +3,16 @@ import { ReservationRepository } from 'src/core/domain/reservation/reservation.r
 
 export class InMemoryReservation implements ReservationRepository {
   private readonly reservations: Reservation[] = [];
+
+  update(reservation: Reservation): Promise<Reservation> {
+    const index = this.reservations.findIndex((r) => r.id === reservation.id);
+    if (index !== -1) {
+      this.reservations[index] = reservation;
+    }
+
+    return Promise.resolve(reservation);
+  }
+
   get(): Promise<Reservation[]> {
     return Promise.resolve(this.reservations);
   }

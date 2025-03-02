@@ -16,6 +16,11 @@ import { ReservationDate } from 'src/core/domain/reservation/reservation.date';
 import { ReservationHour } from 'src/core/domain/reservation/reservation.hour';
 import { ReservationDuration } from 'src/core/domain/reservation/reservation.duration';
 import { isOverlapping } from 'src/core/domain/reservation/is-overlapping.reservation';
+import {
+  HOTDESK_REPOSITORY,
+  HotDeskRepository,
+} from 'src/core/domain/hotdesk/hotdesk.repository';
+import { ReservationMeetingRoomError } from './reservation-meeting-room.exception';
 
 export class CreateReservationCommandHandler {
   constructor(
@@ -23,11 +28,11 @@ export class CreateReservationCommandHandler {
     private readonly reservationRepository: ReservationRepository,
     @Inject(MEETING_ROOM_REPOSITORY)
     private readonly meetingRoomRepository: MeetingRoomRepository,
+    @Inject(HOTDESK_REPOSITORY)
+    private readonly hotDeskRepository: HotDeskRepository,
   ) {}
 
-  async reserveMeetingRoom(
-    createReservation: ReservationDTO,
-  ): Promise<Reservation> {
+  async handle(createReservation: ReservationDTO): Promise<void> {
     const meetingRoomId = ReservationMeetingRoomId.create(
       createReservation.meetingRoomId,
     );
@@ -36,13 +41,11 @@ export class CreateReservationCommandHandler {
     const hour = ReservationHour.create(createReservation.hour);
     const duration = ReservationDuration.create(createReservation.duration);
 
-    const meetingRoom = await this.meetingRoomRepository.findById(
-      createReservation.meetingRoomId,
-    );
+    await this.checkMeetingRoom(meetingRoomId);
 
-    if (!meetingRoom) {
-      throw ReservationError.withMeetingRoomByIdNotFound(meetingRoomId);
-    }
+    const reservationDate = new Date(date.value());
+    const reservationHour = hour.value();
+    this.checkReservationTime(reservationDate, reservationHour);
 
     const activeReservations =
       await this.reservationRepository.findActiveByMeetingRoomAndDate(
@@ -50,8 +53,59 @@ export class CreateReservationCommandHandler {
         createReservation.date,
       );
 
-    const newHour = createReservation.hour;
-    const newDuration = createReservation.duration;
+    this.checkOverlapping(
+      reservationHour,
+      duration.value(),
+      activeReservations,
+    );
+
+    const reservation = new Reservation(
+      meetingRoomId,
+      userId,
+      date,
+      hour,
+      duration,
+    );
+
+    await this.reservationRepository.save(reservation);
+    await this.assignHotDesk(reservation);
+  }
+
+  async checkMeetingRoom(
+    meetingRoomId: ReservationMeetingRoomId,
+  ): Promise<void> {
+    const meetingRoom = await this.meetingRoomRepository.findById(
+      meetingRoomId.value(),
+    );
+
+    if (!meetingRoom) {
+      throw ReservationMeetingRoomError.withMeetingRoomByIdNotFound(
+        meetingRoomId,
+      );
+    }
+  }
+
+  async assignHotDesk(savedReservation: Reservation): Promise<void> {
+    const availableHotDesk = await this.hotDeskRepository.findAvailable();
+    if (availableHotDesk) {
+      availableHotDesk.status = this.hotDeskRepository.markAsAssigned(
+        availableHotDesk.id,
+      );
+      await this.hotDeskRepository.save(availableHotDesk);
+
+      savedReservation.hotDeskId = availableHotDesk;
+
+      await this.reservationRepository.update(savedReservation);
+    }
+  }
+
+  checkOverlapping(
+    reservationHour: number,
+    reservationDuration: number,
+    activeReservations: Reservation[],
+  ): void {
+    const newHour = reservationHour;
+    const newDuration = reservationDuration;
 
     for (const existingReservation of activeReservations) {
       const existingHour = existingReservation.hour.value();
@@ -61,15 +115,17 @@ export class CreateReservationCommandHandler {
         throw ReservationError.withMeetingRoomIsOverlapping();
       }
     }
+  }
 
-    const reserve = new Reservation(
-      meetingRoomId,
-      userId,
-      date,
-      hour,
-      duration,
-    );
-
-    return this.reservationRepository.save(reserve);
+  checkReservationTime(reservationDate: Date, reservationHour: number): void {
+    const now = new Date();
+    if (reservationDate.toDateString() === now.toDateString()) {
+      const nextAvailableHour = now.getHours() + 1;
+      if (reservationHour < nextAvailableHour) {
+        throw ReservationError.withMeetingRoomValidateReservationTime(
+          nextAvailableHour,
+        );
+      }
+    }
   }
 }

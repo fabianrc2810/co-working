@@ -4,10 +4,11 @@ import { RESERVATION_REPOSITORY } from 'src/core/domain/reservation/reservation.
 import { ReservationController } from 'src/core/presentation/reservation/reservation.controller';
 import { InMemoryReservation } from './reservation.inmemory.repository';
 import { MeetingRoomModule } from '../meeting-room/meeting-room.module';
+import { HotDeskModule } from '../hotdesk/hotdesk.module';
 
 @Module({
   controllers: [ReservationController],
-  imports: [MeetingRoomModule],
+  imports: [MeetingRoomModule, HotDeskModule],
   providers: [
     CreateReservationCommandHandler,
     {

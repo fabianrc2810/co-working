@@ -9,4 +9,5 @@ export interface ReservationRepository {
     date: string,
   ): Promise<Reservation[]>;
   isOverlapping(result: boolean): Promise<boolean>;
+  update(reservation: Reservation): Promise<Reservation>;
 }

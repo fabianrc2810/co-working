@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Body, Controller, Post } from '@nestjs/common';
 import { ReservationDTO } from 'src/core/application/reservation/dto/reservation.dto';
 import { CreateReservationCommandHandler } from 'src/core/application/reservation/createreservation.command-handler';
-import { Reservation } from 'src/core/domain/reservation/reservation';
+import { ErrorResponseFactory } from '../error-response-factory';
 
 @Controller('reservation')
 export class ReservationController {
@@ -10,7 +11,12 @@ export class ReservationController {
   ) {}
 
   @Post()
-  async reserve(@Body() reservation: ReservationDTO): Promise<Reservation> {
-    return this.registerReservation.reserveMeetingRoom(reservation);
+  async reserve(@Body() reservation: ReservationDTO): Promise<ReservationDTO> {
+    try {
+      await this.registerReservation.handle(reservation);
+      return reservation;
+    } catch (error) {
+      throw ErrorResponseFactory.create(error);
+    }
   }
 }
