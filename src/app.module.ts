@@ -4,6 +4,7 @@ import { MeetingRoomModule } from './core/infrastructure/meeting-room/meeting-ro
 import { OfficeModule } from './core/infrastructure/office/office.module';
 import { ReservationModule } from './core/infrastructure/reservation/reservation.module';
 import { HotDeskReservationModule } from './core/infrastructure/hotdesk-reservation/hotdesk-reservation.module';
+import { MembershipModule } from './membership/infrastructure/membership/membership.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { HotDeskReservationModule } from './core/infrastructure/hotdesk-reservat
     OfficeModule,
     ReservationModule,
     HotDeskReservationModule,
+    MembershipModule,
   ],
   controllers: [],
   providers: [],
