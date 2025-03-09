@@ -44,8 +44,6 @@ export class CreateMembershipCommandHandler {
       MembershipUserId.create(command.userId),
     );
 
-    console.log(membership);
-
     await this.membershipEventStore.save(membership);
 
     this.eventPublisher.publish(membership.releaseEvents());
