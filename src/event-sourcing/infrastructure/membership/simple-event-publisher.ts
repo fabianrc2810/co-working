@@ -1,5 +1,5 @@
-import { DomainEvent } from 'src/membership/domain/domain-event';
-import { EventPublisher } from 'src/membership/domain/event-publisher';
+import { DomainEvent } from 'src/event-sourcing/domain/domain-event';
+import { EventPublisher } from 'src/event-sourcing/domain/event-publisher';
 
 export class SimpleEventPublisher implements EventPublisher {
   publish(events: DomainEvent[]): void {

@@ -5,4 +5,5 @@ export const MEMBERSHIP_REPOSITORY = 'MembershipReadRepository';
 export interface MembershipReadRepository {
   findByUserId(userId: string): Promise<Membership | null>;
   updateReadModel(membership: Membership): Promise<void>;
+  findByMembershipId(membershipId: string): Promise<Membership | null>;
 }

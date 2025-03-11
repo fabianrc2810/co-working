@@ -1,3 +1,5 @@
+import { PackageSubscribedEvent } from '../package/package-subscribed.event';
+import { MembershipPackage, PackageId } from '../package/package.id';
 import { MembershipCreatedEvent } from './membership-created.event';
 import { MembershipUserId } from './membership-userid';
 import { MembershipStatus } from './membership.status';
@@ -10,6 +12,7 @@ export class MembershipState {
     readonly status: MembershipStatus,
     readonly active: boolean,
     readonly createdAt: Date,
+    readonly packages: MembershipPackage[] = [],
   ) {}
 
   static empty(): MembershipState {
@@ -19,6 +22,7 @@ export class MembershipState {
       MembershipStatus.empty(),
       true,
       new Date(),
+      [],
     );
   }
 
@@ -29,6 +33,24 @@ export class MembershipState {
       MembershipStatus.completed(),
       true,
       event.payload.createdAt,
+      [],
+    );
+  }
+
+  whenPackageSubscribedEvent(event: PackageSubscribedEvent): MembershipState {
+    const newPackage = new MembershipPackage(
+      PackageId.create(event.payload.packageId),
+      event.payload.credits,
+      event.payload.startDate,
+      event.payload.endDate,
+    );
+    return new MembershipState(
+      this.id,
+      this.userId,
+      this.status,
+      this.active,
+      this.createdAt,
+      [...this.packages, newPackage],
     );
   }
 }

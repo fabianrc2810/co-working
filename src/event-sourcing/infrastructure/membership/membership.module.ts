@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
-import { CreateMembershipCommandHandler } from 'src/membership/application/membership/create-membership.command-handler';
 import { InMemoryMembershipReadRepository } from './in-memory-membership-readmodel.repository';
 import { InMemoryMembershipEventStore } from './in-memory-membership-event-store.repository';
 import { SimpleEventPublisher } from './simple-event-publisher';
-import { MembershipController } from 'src/membership/ui/membership.controller';
-import { EVENT_PUBLISHER_REPOSITORY } from 'src/membership/domain/event-publisher';
-import { MEMBERSHIP_REPOSITORY } from 'src/membership/domain/membership/membership.repository';
-import { MEMBERSHIP_EVENT_STORE } from 'src/membership/domain/membership/membership.eventstore';
+import { MembershipController } from 'src/event-sourcing/ui/membership.controller';
+import { CreateMembershipCommandHandler } from 'src/event-sourcing/application/membership/create-membership.command-handler';
+import { EVENT_PUBLISHER_REPOSITORY } from 'src/event-sourcing/domain/event-publisher';
+import { MEMBERSHIP_REPOSITORY } from 'src/event-sourcing/domain/membership/membership.repository';
+import { MEMBERSHIP_EVENT_STORE } from 'src/event-sourcing/domain/membership/membership.eventstore';
+import { RegisterPackageCommandHandler } from 'src/event-sourcing/application/package/register-package.command-handler';
 
 @Module({
   controllers: [MembershipController],
   providers: [
     CreateMembershipCommandHandler,
+    RegisterPackageCommandHandler,
     { provide: EVENT_PUBLISHER_REPOSITORY, useClass: SimpleEventPublisher },
     {
       provide: MEMBERSHIP_REPOSITORY,
@@ -19,6 +21,6 @@ import { MEMBERSHIP_EVENT_STORE } from 'src/membership/domain/membership/members
     },
     { provide: MEMBERSHIP_EVENT_STORE, useClass: InMemoryMembershipEventStore },
   ],
-  exports: [CreateMembershipCommandHandler],
+  exports: [CreateMembershipCommandHandler, RegisterPackageCommandHandler],
 })
 export class MembershipModule {}
