@@ -1,7 +1,7 @@
 import { DomainEvent } from '../domain-event';
 import { MembershipUserId } from './membership-userid';
 import { MembershipStatus } from './membership.status';
-import { MembershipId } from './mermbership.id';
+import { MembershipId } from './membership.id';
 
 export type MembershipCreatedPayload = {
   readonly id: string;

@@ -1,5 +1,5 @@
 import { DomainEvent } from '../../domain/domain-event';
-import { MembershipId } from '../membership/mermbership.id';
+import { MembershipId } from '../membership/membership.id';
 import { PackageId } from './package.id';
 
 export type PackageSubscribedPayload = {

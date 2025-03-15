@@ -3,7 +3,7 @@ import { MembershipPackage, PackageId } from '../package/package.id';
 import { MembershipCreatedEvent } from './membership-created.event';
 import { MembershipUserId } from './membership-userid';
 import { MembershipStatus } from './membership.status';
-import { MembershipId } from './mermbership.id';
+import { MembershipId } from './membership.id';
 
 export class MembershipState {
   constructor(

@@ -7,10 +7,10 @@ import { MembershipCreatedEvent } from './membership-created.event';
 import { MembershipState } from './membership-state';
 import { MembershipUserId } from './membership-userid';
 import { MembershipStatus } from './membership.status';
-import { MembershipId } from './mermbership.id';
+import { MembershipId } from './membership.id';
 
 export class Membership extends EventSourcedEntity {
-  private membershipState: MembershipState;
+  membershipState: MembershipState;
 
   private constructor(stream: Array<DomainEvent> = []) {
     super(stream);

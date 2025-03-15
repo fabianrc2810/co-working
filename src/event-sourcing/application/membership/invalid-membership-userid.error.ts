@@ -1,4 +1,4 @@
-import { BaseError } from 'src/core/exceptions/base-error.exception';
+import { BaseError } from '../../base-error.exception';
 
 export class InvalidMembershipUserId extends BaseError {
   constructor(message: string) {

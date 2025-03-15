@@ -37,7 +37,7 @@ export class CreateMembershipCommandHandler {
       command.userId,
     );
     if (existingMembership) {
-      throw InvalidMembershipError.withInvalidHotDeskNumber(command.userId);
+      throw InvalidMembershipError.withInvalidMembership(command.userId);
     }
 
     const membership = Membership.createStarted(
