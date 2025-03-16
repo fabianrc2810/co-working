@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { InvalidMembershipUserId } from '../application/membership/invalid-membership-userid.error';
-import { InvalidMembershipError } from '../application/membership/invalid-membership.error';
+import { InvalidMembershipExistsError } from '../application/membership/invalid-membership-exists.error';
+import { InvalidMembershipNotFoundError } from '../application/membership/invalid-membership-not-found.error';
 
 type ErrorClass = new (...args: any[]) => Error;
 
@@ -15,8 +16,12 @@ const errorMappings = new Map<ErrorClass, ErrorMapping>([
     { status: HttpStatus.BAD_REQUEST, code: 'INVALID_MEMBERSHIP_USERID' },
   ],
   [
-    InvalidMembershipError,
-    { status: HttpStatus.CONFLICT, code: 'INVALID_MEMBERSHIP' },
+    InvalidMembershipExistsError,
+    { status: HttpStatus.CONFLICT, code: 'INVALID_MEMBERSHIP_EXISTS' },
+  ],
+  [
+    InvalidMembershipNotFoundError,
+    { status: HttpStatus.NOT_FOUND, code: 'INVALID_MEMBERSHIP_NOT_FOUND' },
   ],
 ]);
 

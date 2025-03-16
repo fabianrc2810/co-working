@@ -17,7 +17,7 @@ export class RegisterPackageError extends BaseError {
     return new RegisterPackageError('Invalid year');
   }
 
-  static withInvalidRangeYear(): RegisterPackageError {
+  static withInvalidMonthYear(): RegisterPackageError {
     return new RegisterPackageError('Month must be between 1 and 12');
   }
 

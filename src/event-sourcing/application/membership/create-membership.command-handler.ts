@@ -15,7 +15,7 @@ import {
   MembershipEventStore,
 } from 'src/event-sourcing/domain/membership/membership.eventstore';
 import { InvalidMembershipUserId } from './invalid-membership-userid.error';
-import { InvalidMembershipError } from './invalid-membership.error';
+import { InvalidMembershipExistsError } from './invalid-membership-exists.error';
 
 @Injectable()
 export class CreateMembershipCommandHandler {
@@ -37,7 +37,7 @@ export class CreateMembershipCommandHandler {
       command.userId,
     );
     if (existingMembership) {
-      throw InvalidMembershipError.withInvalidMembership(command.userId);
+      throw InvalidMembershipExistsError.withInvalidMembership(command.userId);
     }
 
     const membership = Membership.createStarted(

@@ -9,7 +9,7 @@ import {
   MembershipReadRepository,
 } from '../../../event-sourcing/domain/membership/membership.repository';
 import { InvalidMembershipUserId } from './invalid-membership-userid.error';
-import { InvalidMembershipError } from './invalid-membership.error';
+import { InvalidMembershipNotFoundError } from './invalid-membership-not-found.error';
 
 describe('GetFullMembershipSummaryQueryHandler', () => {
   let handler: GetFullMembershipSummaryQueryHandler;
@@ -52,7 +52,7 @@ describe('GetFullMembershipSummaryQueryHandler', () => {
         .mockResolvedValue(null);
 
       await expect(handler.handle(query)).rejects.toThrow(
-        InvalidMembershipError,
+        InvalidMembershipNotFoundError,
       );
     });
 
@@ -75,8 +75,8 @@ describe('GetFullMembershipSummaryQueryHandler', () => {
 
       expect(result).toEqual({
         id: 'membership-id',
-        user_id: 'valid-user-id',
-        total_credits: 60,
+        userId: 'valid-user-id',
+        totalCredits: 60,
       });
     });
   });

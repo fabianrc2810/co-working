@@ -41,7 +41,7 @@ export class RegisterPackageCommandHandler {
       command.month < 1 ||
       command.month > 12
     ) {
-      throw RegisterPackageError.withInvalidRangeYear(); //badreq
+      throw RegisterPackageError.withInvalidMonthYear(); //badreq
     }
 
     const membership = await this.membershipReadRepository.findByMembershipId(

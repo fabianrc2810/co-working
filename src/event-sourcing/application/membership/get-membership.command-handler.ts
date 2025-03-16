@@ -4,16 +4,12 @@ import {
   MembershipReadRepository,
 } from '../../domain/membership/membership.repository';
 import { InvalidMembershipUserId } from './invalid-membership-userid.error';
-import { InvalidMembershipError } from './invalid-membership.error';
+import { InvalidMembershipNotFoundError } from './invalid-membership-not-found.error';
+import { MembershipSummaryReadModel } from './dto/membership-summary';
+import { Membership } from 'src/event-sourcing/domain/membership/membership.entity';
 
 export class GetFullMembershipSummaryQuery {
   constructor(public readonly userId: string) {}
-}
-
-export interface MembershipSummaryProjection {
-  id: string;
-  user_id: string;
-  total_credits: number;
 }
 
 export class GetFullMembershipSummaryQueryHandler {
@@ -24,7 +20,7 @@ export class GetFullMembershipSummaryQueryHandler {
 
   async handle(
     query: GetFullMembershipSummaryQuery,
-  ): Promise<MembershipSummaryProjection> {
+  ): Promise<MembershipSummaryReadModel> {
     const { userId } = query;
 
     if (!userId) {
@@ -33,16 +29,22 @@ export class GetFullMembershipSummaryQueryHandler {
 
     const membership = await this.membershipReadRepository.findByUserId(userId);
     if (!membership) {
-      throw InvalidMembershipError.withMembershipNotFound(userId);
+      throw InvalidMembershipNotFoundError.withMembershipNotFound(userId);
     }
 
-    return {
-      id: membership.membershipState.id.value,
-      user_id: membership.membershipState.userId.value,
-      total_credits: membership.membershipState.packages.reduce(
-        (sum, pkg) => sum + pkg.credits,
-        0,
-      ),
-    };
+    return this.getReadModel(membership);
+  }
+
+  private getReadModel(membership: Membership): MembershipSummaryReadModel {
+    const totalCredits = membership.membershipState.packages.reduce(
+      (sum, pkg) => sum + pkg.credits,
+      0,
+    );
+
+    return new MembershipSummaryReadModel(
+      membership.membershipState.id.value,
+      membership.membershipState.userId.value,
+      totalCredits,
+    );
   }
 }
