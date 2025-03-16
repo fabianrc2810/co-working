@@ -30,7 +30,7 @@ export class CreateMembershipCommandHandler {
 
   async handle(command: CreateMembershipCommand): Promise<void> {
     if (!command.userId || command.userId.trim() === '') {
-      throw InvalidMembershipUserId.withInvalidHotDeskNumber();
+      throw InvalidMembershipUserId.withInvalidUserId();
     }
 
     const existingMembership = await this.membershipReadRepository.findByUserId(

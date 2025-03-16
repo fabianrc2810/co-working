@@ -9,12 +9,3 @@ export class PackageId extends Id {
     return new PackageId(value ?? Id.generate());
   }
 }
-
-export class MembershipPackage {
-  constructor(
-    readonly packageId: PackageId,
-    readonly credits: number,
-    readonly startDate: Date,
-    readonly endDate: Date,
-  ) {}
-}

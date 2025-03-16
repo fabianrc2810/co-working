@@ -1,9 +1,10 @@
 import { PackageSubscribedEvent } from '../package/package-subscribed.event';
-import { MembershipPackage, PackageId } from '../package/package.id';
+import { PackageId } from '../package/package.id';
 import { MembershipCreatedEvent } from './membership-created.event';
 import { MembershipUserId } from './membership-userid';
 import { MembershipStatus } from './membership.status';
 import { MembershipId } from './membership.id';
+import { MembershipPackage } from '../package/membership-package';
 
 export class MembershipState {
   constructor(
