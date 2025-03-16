@@ -63,4 +63,9 @@ describe('RegisterPackageCommandHandler', () => {
       membershipMock,
     );
   });
+
+  it('debería lanzar error si credits es negativo', async () => {
+    const command = new RegisterPackageCommand('valid-id', -5, 2025, 3);
+    await expect(handler.handle(command)).rejects.toThrow(RegisterPackageError);
+  });
 });
