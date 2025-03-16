@@ -24,7 +24,7 @@ export class GetFullMembershipSummaryQueryHandler {
     const { userId } = query;
 
     if (!userId) {
-      throw InvalidMembershipUserId.withInvalidHotDeskNumber();
+      throw InvalidMembershipUserId.withInvalidUserId();
     }
 
     const membership = await this.membershipReadRepository.findByUserId(userId);

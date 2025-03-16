@@ -5,7 +5,7 @@ export class InvalidMembershipUserId extends BaseError {
     super(message, 'InvalidMembershipUserId');
   }
 
-  static withInvalidHotDeskNumber(): InvalidMembershipUserId {
+  static withInvalidUserId(): InvalidMembershipUserId {
     return new InvalidMembershipUserId(`UserId is required`);
   }
 }

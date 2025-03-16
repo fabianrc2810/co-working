@@ -17,7 +17,7 @@ import {
 import { MembershipSummaryReadModel } from '../application/membership/dto/membership-summary';
 import { CreateMembershipDto } from '../application/membership/dto/create-membership';
 
-@Controller('membership')
+@Controller('memberships')
 export class MembershipController {
   constructor(
     private readonly createMembershipCommandHandler: CreateMembershipCommandHandler,
@@ -38,7 +38,7 @@ export class MembershipController {
     }
   }
 
-  @Get()
+  @Get('summary')
   async getSummary(userId: string): Promise<MembershipSummaryReadModel> {
     try {
       const query = new GetFullMembershipSummaryQuery(userId);
